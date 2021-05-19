@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
  *
  * @author max.afklercker
  */
-public class BlockchainCommunicator implements Runnable {
+public abstract class BlockchainCommunicator implements Runnable {
     int port;
     String address;
 
@@ -31,7 +31,7 @@ public class BlockchainCommunicator implements Runnable {
 
     @Override
     public void run() {
-        //Try receive message
+        //Try receive message§
         try {
             byte[] receivedMessage = new byte[256];
             DatagramSocket socket = new DatagramSocket(port);
@@ -41,10 +41,12 @@ public class BlockchainCommunicator implements Runnable {
                 socket.receive(packet);
                 String senderInfo = packet.getAddress().getHostName();
                 String receivedMsg = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(senderInfo + ": " + receivedMsg);
+                int senderPort = Integer.parseInt(receivedMsg.substring(0, 4));
+                receivedMsg = receivedMsg.substring(4);
+                System.out.println(""+senderPort + ": " + receivedMsg);
             }
         } catch (IOException ex) {
-                System.out.println("IO Exception. Message could not be received.");
+            System.out.println("IO Exception. Message could not be received.");
         }
     }
     
@@ -52,7 +54,7 @@ public class BlockchainCommunicator implements Runnable {
         try {
             InetAddress inetAddress = InetAddress.getByName("localhost");
             DatagramSocket socket = new DatagramSocket();
-            byte[] message = msg.trim().getBytes();
+            byte[] message = (""+port+msg).trim().getBytes();
 
             socket.send(new DatagramPacket(message, message.length, inetAddress, port));
 
@@ -64,4 +66,10 @@ public class BlockchainCommunicator implements Runnable {
             System.out.println("IO Exception. Message could not be sent.");
         }
     }
+    
+    public void execute(String command, int from) {
+        
+    }
+    
+    public abstract void localExecute(String command, int from);
 }
