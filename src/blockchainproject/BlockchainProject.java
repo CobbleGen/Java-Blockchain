@@ -15,8 +15,8 @@ public class BlockchainProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BlockchainCommunicator b1 = new BlockchainCommunicator(2000);
-        BlockchainCommunicator b2 = new BlockchainCommunicator(2005);
+        BlockchainCommunicator b1 = new Node(2000);
+        BlockchainCommunicator b2 = new Node(2005);
         b1.sendMessage(2005, "Hejsan svejsan!");
         b2.sendMessage(2000, "sug min röv");
     }
