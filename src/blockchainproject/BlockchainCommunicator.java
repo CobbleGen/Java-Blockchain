@@ -39,11 +39,22 @@ public abstract class BlockchainCommunicator implements Runnable {
             while(true) {
                 DatagramPacket packet = new DatagramPacket(receivedMessage, receivedMessage.length);
                 socket.receive(packet);
-                String senderInfo = packet.getAddress().getHostName();
                 String receivedMsg = new String(packet.getData(), 0, packet.getLength());
                 int senderPort = Integer.parseInt(receivedMsg.substring(0, 4));
                 receivedMsg = receivedMsg.substring(4);
                 System.out.println(""+senderPort + ": " + receivedMsg);
+                String[] commands = receivedMsg.split("\\)");
+                for (String c: commands) {
+                    String[] args = c.split("\\(");
+                    if(args.length > 1) {
+                        execute(args[0], args[1], senderPort);
+                        localExecute(args[0], args[1], senderPort);
+                    } else {
+                        execute(args[0], "", senderPort);
+                        localExecute(args[0], "", senderPort);
+                    }
+                    
+                }
             }
         } catch (IOException ex) {
             System.out.println("IO Exception. Message could not be received.");
@@ -54,7 +65,7 @@ public abstract class BlockchainCommunicator implements Runnable {
         try {
             InetAddress inetAddress = InetAddress.getByName("localhost");
             DatagramSocket socket = new DatagramSocket();
-            byte[] message = (""+port+msg).trim().getBytes();
+            byte[] message = (""+this.port+msg).trim().getBytes();
 
             socket.send(new DatagramPacket(message, message.length, inetAddress, port));
 
@@ -67,9 +78,9 @@ public abstract class BlockchainCommunicator implements Runnable {
         }
     }
     
-    public void execute(String command, int from) {
+    public void execute(String command, String args, int from) {
         
     }
     
-    public abstract void localExecute(String command, int from);
+    public abstract void localExecute(String command, String args, int from);
 }
