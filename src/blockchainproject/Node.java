@@ -49,17 +49,28 @@ public class Node extends BlockchainCommunicator {
         mp.add(headerLabel, c);
         
         JButton btn_newMiner = new JButton("New Miner");
-        c.gridx = 1;
+        c.gridx = 3;
         c.gridwidth = 1;
         c.gridy = 0;
         mp.add(btn_newMiner, c);
         btn_newMiner.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BlockchainCommunicator b3 = new Node(2011);
+                new Node((int)(Math.random()*1000));
             }
-            
         });
+        
+//        JButton btn_newWallet = new JButton("New Wallet");
+//        c.gridx = 3;
+//        c.gridwidth = 1;
+//        c.gridy = 0;
+//        mp.add(btn_newWallet, c);
+//        btn_newMiner.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                new Node((int)(Math.random()*1000));
+//            }
+//        });
         
         JPanel jp1 = new JPanel();
         jp1.setBackground(Color.red);
@@ -85,6 +96,7 @@ public class Node extends BlockchainCommunicator {
             nodes.add(2000);
         }
     }
+
 
     @Override
     public void localExecute(String command, String args, int from) {

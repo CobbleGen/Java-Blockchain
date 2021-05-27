@@ -65,7 +65,8 @@ public abstract class BlockchainCommunicator implements Runnable {
         try {
             InetAddress inetAddress = InetAddress.getByName("localhost");
             DatagramSocket socket = new DatagramSocket();
-            byte[] message = (""+this.port+msg).trim().getBytes();
+            String padded = String.format("%04d" , this.port);
+            byte[] message = (padded+msg).trim().getBytes();
 
             socket.send(new DatagramPacket(message, message.length, inetAddress, port));
 
